@@ -1,5 +1,6 @@
 import crypt
 import os
+import app
 
 def register(password):
     if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") == True:
@@ -26,14 +27,13 @@ def login(password):
         file_password_hash = file.read()
         file.close()
         if password_hash == file_password_hash:
-            print("Log In Successful!")
-            # TODO: Decrypt the keys with the password
-            # Keyscheme:         _PUBLICKEY
-            #                   |
-            # -PASSWORD--AESKEY-|
-            #                   |_PRIVATEKEY
+            # DONE: Decrypt the key with the password
+            # Keyscheme:        
+            #                   
+            # -PASSWORD--AESKEY--ENCRYPTED_PASSWORDS
+            #                   
             aes_key = crypt.getKey(password)
-            print(aes_key)
+            app.menu(aes_key)
         else:
             return False
 
