@@ -15,6 +15,7 @@ def login():
         if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") == True:
             login_status = True
             while True:
+                os.system("clear")
                 # Print Lock Icon
                 for i in range(len(lock)):
                     print(lock[i].center(int(width)))
