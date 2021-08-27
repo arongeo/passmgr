@@ -69,6 +69,7 @@ def login():
             break
 
 def quit_app():
+    os.system("clear")
     quit()
 
 menu_options = ['Get Password', 'Add Password', 'Quit']
@@ -90,7 +91,7 @@ def print_menu(stdscr, selected_row_index):
     stdscr.refresh()
 
 
-def curses_menu_config(stdscr):
+def curses_main_menu_config(stdscr):
     curses.curs_set(0)
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
@@ -130,5 +131,5 @@ def curses_menu_config(stdscr):
 def menu(aes_key):
     global global_aes_key
     global_aes_key = aes_key
-    curses.wrapper(curses_menu_config)
+    curses.wrapper(curses_main_menu_config)
 
