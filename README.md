@@ -1,7 +1,7 @@
 # passmgr
 A Password Manager in Terminal. Written in Python. Made by @mrmalac
 
-# THIS IS A WORK IN PROGRESS AND VERY MUCH NOT DONE, SO DON'T USE IT YET!
+THIS IS A WORK IN PROGRESS AND VERY MUCH NOT DONE, SO DON'T USE IT YET!
 
 ## How secure is it?
 - Each username/e-mail and password is encrypted with AES-256 encryption before saving it into the SQLite Database.
