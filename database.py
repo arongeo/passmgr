@@ -46,8 +46,15 @@ def read_from_db():
 
     credentials = []
 
-    # TODO: Save ids, usernames and passwords for temporary use
     for row in cur.execute("SELECT * FROM passwords ORDER BY id"):
         credentials.append(row)
 
     return credentials
+
+def delete_from_db(sql_id):
+    db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
+    cur = db.cursor()
+    cur.execute('DELETE FROM passwords WHERE id = ' + str(sql_id) + ';')
+
+    db.commit()
+    db.close()
