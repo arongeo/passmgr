@@ -20,9 +20,9 @@ def login():
                 for i in range(len(lock)):
                     print(lock[i].center(int(width)))
                 if login_status == False:
-                    print("Password is incorrect, please try again!")
+                    print("Master Password is incorrect, please try again!")
                     print("")
-                print("Enter Password:")
+                print("Enter Master Password:")
                 password = getpass.getpass("")
                 if password == "q" or password == "quit" or password == "exit":
                     os.system("clear")
@@ -41,7 +41,7 @@ def login():
                 if isIt2nd == True:
                     print("Registration failed! Please Try Again!")
                     print(" ")
-                print("Set Password:")
+                print("Set Master Password:")
                 password1 = getpass.getpass("")
                 if password1 == "q" or password1 == "quit" or password1 == "exit":
                     os.system("clear")
@@ -50,7 +50,7 @@ def login():
                 # Print Lock Icon
                 for i in range(len(lock)):
                     print(lock[i].center(int(width)))
-                print("Reenter Password:")
+                print("Reenter Master Password:")
                 password2 = getpass.getpass("")
                 if password2 == "q" or password2 == "quit" or password2 == "exit":
                     os.system("clear")
