@@ -7,12 +7,12 @@ def create_db():
     db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
     cur = db.cursor()
     cur.execute('''CREATE TABLE passwords
-                    (id integer PRIMARY KEY, username text NOT NULL, password text NOT NULL)''')
+                    (id integer PRIMARY KEY, websitename text NOT NULL, username text NOT NULL, password text NOT NULL)''')
 
     db.commit()
     db.close()
 
-def insert_into_db(username, password):
+def insert_into_db(websitename, username, password):
     db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
     cur = db.cursor()
 
@@ -23,7 +23,7 @@ def insert_into_db(username, password):
     else:
         sql_id = 1
 
-    cur.execute("INSERT INTO passwords VALUES (" + str(sql_id) + ", '" + username + "', '" + password + "')")
+    cur.execute("INSERT INTO passwords VALUES (" + str(sql_id) + ", '" + websitename + "', '" + username + "', '" + password + "')")
 
     db.commit()
     db.close()
@@ -32,12 +32,22 @@ def insert_into_db(username, password):
 
     sql_id_file = open(f"{os.getenv('HOME')}/passmgr/sql_id", "w")
     sql_id_file.write(str(sql_id))
-    sql_id_file.close()
+    sql_id_file.close()       
 
-def read_from_db(sql_id):
-    db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
-    cur = db.cursor()
+def reset_id():
+    sql_id = 1
+    sql_id_file = open(f"{os.getenv('HOME')}/passmgr/sql_id", "w")
+    sql_id_file.write(str(sql_id))
+    sql_id_file.close()       
     
+def read_from_db():
+    db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
+    cur = db.cursor()   
+
+    credentials = []
+
     # TODO: Save ids, usernames and passwords for temporary use
     for row in cur.execute("SELECT * FROM passwords ORDER BY id"):
-        print(row)
+        credentials.append(row)
+
+    return credentials
