@@ -7,12 +7,12 @@ def create_db():
     db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
     cur = db.cursor()
     cur.execute('''CREATE TABLE passwords
-                    (id integer PRIMARY KEY, websitename text NOT NULL, username text NOT NULL, password text NOT NULL)''')
+                    (id integer PRIMARY KEY, websitename text NOT NULL, username text NOT NULL, password text NOT NULL, iv text NOT NULL)''')
 
     db.commit()
     db.close()
 
-def insert_into_db(websitename, username, password):
+def insert_into_db(websitename, username, password, iv):
     db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
     cur = db.cursor()
 
@@ -23,7 +23,7 @@ def insert_into_db(websitename, username, password):
     else:
         sql_id = 1
 
-    cur.execute("INSERT INTO passwords VALUES (" + str(sql_id) + ", '" + websitename + "', '" + username + "', '" + password + "')")
+    cur.execute("INSERT INTO passwords VALUES (" + str(sql_id) + ", '" + websitename + "', '" + username + "', '" + password + "', '" + iv + "')")
 
     db.commit()
     db.close()

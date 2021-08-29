@@ -5,7 +5,8 @@ import os
 import curses
 import getpass
 
-global_aes_key = ""
+global_aes = []
+global_db_key = ""
 
 def login():
     lock = ["", " @@@@@@@ ", " @@     @@ ", " @       @ "," @       @ ","@@@@@@@@@@@","@@@@@@@@@@@","@@@@@ @@@@@","@@@@@ @@@@@","@@@@@@@@@@@","@@@@@@@@@@@", "", "passmgr", "", ""]
@@ -68,7 +69,8 @@ def login():
                     isIt2nd = True
             break
 
-def quit_app():
+def quit_app(db_key):
+    crypt.encrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
     os.system("clear")
     quit()
 
@@ -96,9 +98,12 @@ def curses_main_menu_config(stdscr):
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
     current_row_index = 0
-    global global_aes_key
-    aes_key = global_aes_key
-    global_aes_key = "nothingtoseehere"
+    global global_aes
+    global global_db_key
+    aes = global_aes
+    db_key = global_db_key
+    global_aes = ["nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere", "nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere"] 
+    global_db_key = "nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere"
 
     print_menu(stdscr, current_row_index)
 
@@ -119,7 +124,7 @@ def curses_main_menu_config(stdscr):
             elif current_row_index == 1:
                 stdscr.addstr(0, 0, "Adding Passwords Will Be Here!")
             elif current_row_index == 2:
-                quit_app()
+                quit_app(db_key)
             
             current_row_index = 0
             stdscr.refresh()
@@ -128,8 +133,10 @@ def curses_main_menu_config(stdscr):
         print_menu(stdscr, current_row_index)
         stdscr.refresh()
 
-def menu(aes_key):
-    global global_aes_key
-    global_aes_key = aes_key
+def menu(aes, db_key):
+    global global_aes
+    global global_db_key
+    global_aes = aes
+    global_db_key = db_key
     curses.wrapper(curses_main_menu_config)
 

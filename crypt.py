@@ -1,5 +1,4 @@
-import cryptography
-import rsa
+from cryptography.fernet import Fernet
 import hashlib
 from Crypto.Cipher import AES
 import string
@@ -34,6 +33,21 @@ def advanced_password_hash(password):
     password_file.close()
     return sha256_hash
 
+def do_aes_files_exist():
+    if os.path.isfile(f"{os.getenv('HOME')}/passmgr/aes_key_pass") == True:
+        if os.path.isfile(f"{os.getenv('HOME')}/passmgr/aes_key_db") == True:
+            if os.path.isfile(f"{os.getenv('HOME')}/passmgr/aes_key_pass_iv") == True:
+                if os.path.isfile(f"{os.getenv('HOME')}/passmgr/aes_key_db_iv") == True:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
+    else:
+        return False
+
 def getKey(password):
     md5 = hashlib.md5()
     md5.update(advanced_password_hash(password).encode('UTF-8'))
@@ -50,16 +64,73 @@ def getKey(password):
     iv_file.close()
     aes_object = AES.new(password_aes_key, AES.MODE_CBC, iv)
 
-    if os.path.isfile(f"{os.getenv('HOME')}/passmgr/aes_key"):
+    if do_aes_files_exist() == True:
         encrypted_aes_key_file = open(f"{os.getenv('HOME')}/passmgr/aes_key", "rb")
         encrypted_aes_key = encrypted_aes_key_file.read()
         aes_key = aes_object.decrypt(encrypted_aes_key)
         encrypted_aes_key_file.close()
-        return aes_key
+
+        encrypted_db_key_file = open(f"{os.getenv('HOME')}/passmgr/db_key", "r")
+        encrypted_db_key = encrypted_db_key_file.read()
+        db_key = aes_object.decrypt(encrypted_db_key)
+        encrypted_db_key_file.close()
+        db_key = db_key.replace(' ', '')
+
+        aes_key_iv_file = open(f"{os.getenv('HOME')}/passmgr/aes_key_iv", "r")
+        aes_key_iv = aes_key_iv_file.read()
+        aes_key_iv_file.close()
+
+        aes = [aes_key, aes_key_iv]
+
+        return aes, db_key
     else:
         aes_key = generateString(32)
         encrypted_aes_key = aes_object.encrypt(aes_key)
         encrypted_aes_key_file = open(f"{os.getenv('HOME')}/passmgr/aes_key", "wb")
         encrypted_aes_key_file.write(encrypted_aes_key)
         encrypted_aes_key_file.close()
-        return aes_key
+
+        db_key = Fernet.generate_key()
+        db_key = db_key.decode('UTF-8')
+        while len(db_key) % 16 != 0:
+            db_key += " "
+        encrypted_db_key = aes_object.encrypt(db_key)
+        encrypted_db_key_file = open(f"{os.getenv('HOME')}/passmgr/db_key", "wb")
+        encrypted_db_key_file.write(encrypted_db_key)
+        encrypted_db_key_file.close()
+
+        aes_key_iv = generateString(16)
+        aes_key_iv_file = open(f"{os.getenv('HOME')}/passmgr/aes_key_iv", "w")
+        aes_key_iv_file.write(aes_key_iv)
+        aes_key_iv_file.close()
+
+        aes = [aes_key, aes_key_iv]
+
+        return aes, db_key
+
+def encrypt_database(db_filepath, db_key):
+    fernet = Fernet(db_key.encode('UTF-8'))
+
+    db_file = open(db_filepath, "rb")
+    db = db_file.read()
+    db_file.close()
+
+    encrypted_db = fernet.encrypt(db)
+
+    encrypted_db_file = open(db_filepath, "wb")
+    encrypted_db_file.write(encrypted_db)
+    encrypted_db_file.close()
+
+
+def decrypt_database(db_filepath, db_key):
+    fernet = Fernet(db_key.encode('UTF-8'))
+
+    encrypted_db_file = open(db_filepath, "rb")
+    encrypted_db = encrypted_db_file.read()
+    encrypted_db_file.close()
+
+    decrypted_db = fernet.decrypt(encrypted_db)
+
+    db_file = open(db_filepath, "wb")
+    db_file.write(decrypted_db)
+    db_file.close()
