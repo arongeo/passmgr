@@ -69,8 +69,7 @@ def login():
                     isIt2nd = True
             break
 
-def quit_app(db_key):
-    crypt.encrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
+def quit_app():
     os.system("clear")
     quit()
 
@@ -107,8 +106,6 @@ def curses_main_menu_config(stdscr):
 
     print_menu(stdscr, current_row_index)
 
-    crypt.decrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
-
     while True:
         key = stdscr.getch()
 
@@ -126,7 +123,7 @@ def curses_main_menu_config(stdscr):
             elif current_row_index == 1:
                 stdscr.addstr(0, 0, "Adding Passwords Will Be Here!")
             elif current_row_index == 2:
-                quit_app(db_key)
+                quit_app()
             
             current_row_index = 0
             stdscr.refresh()

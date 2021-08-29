@@ -12,7 +12,8 @@ def create_db():
     db.commit()
     db.close()
 
-def insert_into_db(websitename, username, password, iv):
+def insert_into_db(db_key, websitename, username, password, iv):
+    crypt.decrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
     db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
     cur = db.cursor()
 
@@ -28,6 +29,8 @@ def insert_into_db(websitename, username, password, iv):
     db.commit()
     db.close()
 
+    crypt.encrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
+
     sql_id += 1
 
     sql_id_file = open(f"{os.getenv('HOME')}/passmgr/sql_id", "w")
@@ -41,6 +44,7 @@ def reset_id():
     sql_id_file.close()       
     
 def read_from_db():
+    crypt.decrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
     db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
     cur = db.cursor()   
 
@@ -49,12 +53,17 @@ def read_from_db():
     for row in cur.execute("SELECT * FROM passwords ORDER BY id"):
         credentials.append(row)
 
+    crypt.encrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
+    
     return credentials
 
 def delete_from_db(sql_id):
+    crypt.decrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
     db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
     cur = db.cursor()
     cur.execute('DELETE FROM passwords WHERE id = ' + str(sql_id) + ';')
 
     db.commit()
     db.close()
+
+    crypt.encrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
