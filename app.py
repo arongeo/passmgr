@@ -107,6 +107,8 @@ def curses_main_menu_config(stdscr):
 
     print_menu(stdscr, current_row_index)
 
+    crypt.decrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
+
     while True:
         key = stdscr.getch()
 
