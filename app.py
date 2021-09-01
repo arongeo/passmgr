@@ -1,4 +1,3 @@
-import getch
 import crypt
 import auth
 import os
