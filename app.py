@@ -1,7 +1,6 @@
 import crypt
 import auth
 import os
-import curses
 import getpass
 
 global_aes = []
@@ -71,70 +70,4 @@ def login():
 def quit_app():
     os.system("clear")
     quit()
-
-menu_options = ['Get Password', 'Add Password', 'Quit']
-
-def print_menu(stdscr, selected_row_index):
-    stdscr.clear()
-    h, w = stdscr.getmaxyx()
-
-    for index, row in enumerate(menu_options):
-            x = w//2 - len(row)//2
-            y = h//2 - len(menu_options)//2 + index
-            if index == selected_row_index:
-                stdscr.attron(curses.color_pair(1))
-                stdscr.addstr(y, x, row)
-                stdscr.attroff(curses.color_pair(1))
-            else:
-                stdscr.addstr(y, x, row)
-
-    stdscr.refresh()
-
-
-def curses_main_menu_config(stdscr):
-    curses.curs_set(0)
-    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-
-    current_row_index = 0
-    global global_aes
-    global global_db_key
-    aes = global_aes
-    db_key = global_db_key
-    global_aes = ["nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere", "nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere"] 
-    global_db_key = "nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere"
-
-    print_menu(stdscr, current_row_index)
-
-    while True:
-        key = stdscr.getch()
-
-        stdscr.clear()
-
-        if key == curses.KEY_UP and current_row_index > 0:
-            current_row_index -= 1
-        elif key == curses.KEY_DOWN and current_row_index < len(menu_options)-1:
-            current_row_index += 1
-        elif key == curses.KEY_ENTER or key in [10, 13]:
-            stdscr.clear()
-
-            if current_row_index == 0:
-                stdscr.addstr(0, 0, "Passwords Will Be Here!")
-            elif current_row_index == 1:
-                stdscr.addstr(0, 0, "Adding Passwords Will Be Here!")
-            elif current_row_index == 2:
-                quit_app()
-            
-            current_row_index = 0
-            stdscr.refresh()
-            stdscr.getch()
- 
-        print_menu(stdscr, current_row_index)
-        stdscr.refresh()
-
-def menu(aes, db_key):
-    global global_aes
-    global global_db_key
-    global_aes = aes
-    global_db_key = db_key
-    curses.wrapper(curses_main_menu_config)
 

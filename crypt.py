@@ -75,12 +75,9 @@ def getKey(password):
         db_key = aes_object.decrypt(encrypted_db_key)
         encrypted_db_key_file.close()
         db_key = db_key.replace(' ', '')
+        db_key = db_key.encode('UTF-8')
 
-        aes_key_iv_file = open(f"{os.getenv('HOME')}/passmgr/aes_key_iv", "r")
-        aes_key_iv = aes_key_iv_file.read()
-        aes_key_iv_file.close()
-
-        aes = [aes_key, aes_key_iv]
+        aes = aes_key
 
         return aes, db_key
     else:
@@ -99,12 +96,7 @@ def getKey(password):
         encrypted_db_key_file.write(encrypted_db_key)
         encrypted_db_key_file.close()
 
-        aes_key_iv = generateString(16)
-        aes_key_iv_file = open(f"{os.getenv('HOME')}/passmgr/aes_key_iv", "w")
-        aes_key_iv_file.write(aes_key_iv)
-        aes_key_iv_file.close()
-
-        aes = [aes_key, aes_key_iv]
+        aes = aes_key
 
         return aes, db_key
 
@@ -134,3 +126,32 @@ def decrypt_database(db_filepath, db_key):
     db_file = open(db_filepath, "wb")
     db_file.write(decrypted_db)
     db_file.close()
+
+def encrypt_username_and_password(aes, username, password):
+    while len(username) % 16 != 0:
+        username += " "
+    while len(password) % 16 != 0:
+        password += " "
+    succeeded = False
+    encrypted_username = ""
+    encrypted_password = ""
+    username_iv = ""
+    password_iv = ""
+    username_iv = generateString(16)
+    aes_object = AES.new(aes, AES.MODE_CBC, username_iv)
+    encrypted_username = aes_object.encrypt(username)
+    succeeded = True
+
+    password_iv = generateString(16)
+    aes_object = AES.new(aes, AES.MODE_CBC, password_iv)
+    encrypted_password = aes_object.encrypt(password)
+    succeeded = True
+
+    password = "nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere"
+    username = "nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere"
+    aes_object = "nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere"
+    password = [encrypted_password, password_iv]
+    username = [encrypted_username, username_iv]
+    return username, password
+
+

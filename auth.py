@@ -2,6 +2,7 @@ import crypt
 import os
 import app
 import database
+import menu
 
 def register(password):
     if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") == True:
@@ -37,7 +38,7 @@ def login(password):
             if os.path.isfile(f"{os.getenv('HOME')}/passmgr/passwords.db") == False:
                 database.create_db()
                 crypt.encrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
-            app.menu(aes, db_key)
+            menu.menu(aes, db_key)
         else:
             return False
 
