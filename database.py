@@ -43,7 +43,7 @@ def reset_id():
     sql_id_file.write(str(sql_id))
     sql_id_file.close()       
     
-def read_from_db():
+def read_from_db(db_key):
     crypt.decrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
     db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
     cur = db.cursor()   
@@ -57,7 +57,7 @@ def read_from_db():
     
     return credentials
 
-def delete_from_db(sql_id):
+def delete_from_db(db_key, sql_id):
     crypt.decrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
     db = sqlite3.connect(f"{os.getenv('HOME')}/passmgr/passwords.db")
     cur = db.cursor()

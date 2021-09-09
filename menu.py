@@ -21,13 +21,15 @@ def add_password(aes, db_key):
         password = input("Password: ")
         for _ in range(height_3-4):
             print("")
-        verify_text = "(E)dit or any other key to continue"
+        verify_text = "(E)dit, (B)ack to menu, or press any other key to continue"
         print(verify_text.center(width))
         for _ in range(height_3-1):
             print("")
         c = getch.getch()
         if c == "E" or c == "e":
             continue
+        if c == "B" or c == "b":
+            return
         else:
             password_verified = True
     username, password = crypt.encrypt_username_and_password(aes, username, password)
