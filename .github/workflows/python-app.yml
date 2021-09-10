@@ -38,4 +38,5 @@ jobs:
     - name: "Upload coverage to Codecov"
       uses: codecov/codecov-action@v2
       with:
+        file: .coverage
         token: 121b14fb-2efa-45be-9e4d-c7d2713d404c
