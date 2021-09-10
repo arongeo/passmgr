@@ -2,3 +2,4 @@ pycrypto
 cryptography
 getch
 pytest-cov
+coverage
