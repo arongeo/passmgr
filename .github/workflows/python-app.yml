@@ -38,3 +38,4 @@ jobs:
       uses: codecov/codecov-action@v2
       with:
         fail_ci_if_error: true
+        token: 121b14fb-2efa-45be-9e4d-c7d2713d404c
