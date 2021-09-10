@@ -1,7 +1,5 @@
 # passmgr
 
-[![codecov](https://codecov.io/gh/arongeo/passmgr/branch/master/graph/badge.svg?token=3WEX02TJH9)](https://codecov.io/gh/arongeo/passmgr)
-
 A Password Manager in Terminal. Written in Python. Made by @mrmalac
 
 THIS IS A WORK IN PROGRESS AND VERY MUCH NOT DONE, SO DON'T USE IT YET!
