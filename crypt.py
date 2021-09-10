@@ -129,16 +129,14 @@ def encrypt_username_and_password(aes, username, password):
         username += " "
     while len(password) % 16 != 0:
         password += " "
-    succeeded = False
+
     username_iv = generateString(16)
     aes_object = AES.new(aes, AES.MODE_CBC, username_iv)
     encrypted_username = aes_object.encrypt(username)
-    succeeded = True
 
     password_iv = generateString(16)
     aes_object = AES.new(aes, AES.MODE_CBC, password_iv)
     encrypted_password = aes_object.encrypt(password)
-    succeeded = True
 
     del password
     del username

@@ -1,4 +1,3 @@
-import crypt
 import auth
 import os
 import getpass

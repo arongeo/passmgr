@@ -1,6 +1,5 @@
 import crypt
 import os
-import app
 import database
 import menu
 
@@ -30,10 +29,10 @@ def login(password):
         file.close()
         if password_hash == file_password_hash:
             # DONE: Decrypt the key with the password
-            # Keyscheme:       
-            #                   
+            # Keyscheme:
+            #
             # -PASSWORD--AESKEY--ENCRYPTED_PASSWORDS
-            #                   
+            #
             aes, db_key = crypt.getKey(password)
             if os.path.isfile(f"{os.getenv('HOME')}/passmgr/passwords.db") == False:
                 database.create_db()
