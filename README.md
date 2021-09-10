@@ -1,5 +1,6 @@
 # passmgr
 
+![Python Build](https://github.com/arongeo/passmgr/workflows/Python-Build/badge.svg) 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/42ae3d1011c34573b5faf0a56fc08483)](https://app.codacy.com/gh/arongeo/passmgr?utm_source=github.com&utm_medium=referral&utm_content=arongeo/passmgr&utm_campaign=Badge_Grade_Settings)
 
 A Password Manager in Terminal. Written in Python. Made by @mrmalac
