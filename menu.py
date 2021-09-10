@@ -1,4 +1,3 @@
-import curses
 import app
 import getch
 import os
@@ -51,7 +50,7 @@ def menu(aes, db_key):
         if c == "A" or c == "a":
             add_password(aes, db_key)
         if c == "G" or c == "g":
-            pass
+            database.read_from_db(db_key)
         if c == "H" or c == "h":
             pass
         if c == "Q" or c == "q":
