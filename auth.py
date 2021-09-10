@@ -15,7 +15,7 @@ def register(password):
         file = open(f"{os.getenv('HOME')}/passmgr/password", "w")
         file.write(password_hash)
         file.close()
-        password = "nothingtoseehere"
+        del password
         return
 
 def login(password):
@@ -30,7 +30,7 @@ def login(password):
         file.close()
         if password_hash == file_password_hash:
             # DONE: Decrypt the key with the password
-            # Keyscheme:        
+            # Keyscheme:       
             #                   
             # -PASSWORD--AESKEY--ENCRYPTED_PASSWORDS
             #                   

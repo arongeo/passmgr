@@ -43,9 +43,10 @@ def do_aes_files_exist():
         return False
 
 def getKey(password):
-    md5 = hashlib.md5()
-    md5.update(advanced_password_hash(password).encode('UTF-8'))
-    password_aes_key = md5.hexdigest()
+    sha512 = hashlib.sha512()
+    sha512.update(advanced_password_hash(password).encode('UTF-8'))
+    password_aes_key = sha512.hexdigest()
+    password_aes_key = password_aes_key[:32]
 
     if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password_aes_key_iv"):
         iv_file = open(f"{os.getenv('HOME')}/passmgr/password_aes_key_iv", "r")
@@ -57,6 +58,9 @@ def getKey(password):
 
     iv_file.close()
     aes_object = AES.new(password_aes_key, AES.MODE_CBC, iv)
+
+    del sha512
+    del password_aes_key
 
     if do_aes_files_exist() == True:
         encrypted_aes_key_file = open(f"{os.getenv('HOME')}/passmgr/aes_key", "rb")
@@ -74,7 +78,7 @@ def getKey(password):
 
         return aes, db_key
     else:
-        aes_key = generateString(32)
+        aes_key = os.urandom(32)
         encrypted_aes_key = aes_object.encrypt(aes_key)
         encrypted_aes_key_file = open(f"{os.getenv('HOME')}/passmgr/aes_key", "wb")
         encrypted_aes_key_file.write(encrypted_aes_key)
@@ -126,10 +130,6 @@ def encrypt_username_and_password(aes, username, password):
     while len(password) % 16 != 0:
         password += " "
     succeeded = False
-    encrypted_username = ""
-    encrypted_password = ""
-    username_iv = ""
-    password_iv = ""
     username_iv = generateString(16)
     aes_object = AES.new(aes, AES.MODE_CBC, username_iv)
     encrypted_username = aes_object.encrypt(username)
@@ -140,9 +140,9 @@ def encrypt_username_and_password(aes, username, password):
     encrypted_password = aes_object.encrypt(password)
     succeeded = True
 
-    password = "nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere"
-    username = "nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere"
-    aes_object = "nothingtoseeherenothingtoseeherenothingtoseeherenothingtoseehere"
+    del password
+    del username
+    del aes_object
     password = [encrypted_password, password_iv]
     username = [encrypted_username, username_iv]
     return username, password

@@ -23,11 +23,8 @@ def login():
                     print("")
                 print("Enter Master Password:")
                 password = getpass.getpass("")
-                if password == "q" or password == "quit" or password == "exit":
-                    os.system("clear")
-                    quit()
                 login_status = auth.login(password)
-                password = "nothingtoseehere"
+                del password
         else:
             # Is it the second time in the infinite loop
             isIt2nd = False;
@@ -42,9 +39,6 @@ def login():
                     print(" ")
                 print("Set Master Password:")
                 password1 = getpass.getpass("")
-                if password1 == "q" or password1 == "quit" or password1 == "exit":
-                    os.system("clear")
-                    quit()
                 os.system("clear")
                 # Print Lock Icon
                 for i in range(len(lock)):
@@ -56,11 +50,11 @@ def login():
                     quit()
                 # Compare if passwords are same
                 if password1 == password2:
-                   # Register the password 
+                   # Register the password
                    auth.register(password1)
                    # Reset the password variables
-                   password1 = "nothingtoseehere"
-                   password2 = "nothingtoseehere"
+                   del password1
+                   del password2
                    break
                 else:
                     # If the passwords do not match restart the loop and print the 'Registration Failed!' text
