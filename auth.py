@@ -10,7 +10,7 @@ def register(password):
         quit()
     else:
         os.makedirs(f"{os.getenv('HOME')}/passmgr")
-        password_hash = crypt.hash(password)
+        password_hash = crypt.sha256_hash(password)
         file = open(f"{os.getenv('HOME')}/passmgr/password", "w")
         file.write(password_hash)
         file.close()
@@ -23,7 +23,7 @@ def login(password):
         print("[ERROR] Password file doesn't exist, quitting!")
         quit()
     else:
-        password_hash = crypt.hash(password)
+        password_hash = crypt.sha256_hash(password)
         file = open(f"{os.getenv('HOME')}/passmgr/password", "r")
         file_password_hash = file.read()
         file.close()

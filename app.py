@@ -44,9 +44,6 @@ def login():
                     print(lock[i].center(int(width)))
                 print("Reenter Master Password:")
                 password2 = getpass.getpass("")
-                if password2 == "q" or password2 == "quit" or password2 == "exit":
-                    os.system("clear")
-                    quit()
                 # Compare if passwords are same
                 if password1 == password2:
                    # Register the password

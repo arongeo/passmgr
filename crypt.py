@@ -5,7 +5,7 @@ import string
 import random
 import os
 
-def hash(password):
+def sha256_hash(password):
     sha256 = hashlib.sha256()
     password += "YBf3i3uithAt3t3hgOHg4w4"
     sha256.update(password.encode('UTF-8'))
