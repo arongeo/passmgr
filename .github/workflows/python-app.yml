@@ -33,9 +33,9 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test
       run: |
-        coverage run tests.py
+        pip install coverage
+        coverage run -m unittest
     - name: "Upload coverage to Codecov"
       uses: codecov/codecov-action@v2
       with:
-        fail_ci_if_error: true
         token: 121b14fb-2efa-45be-9e4d-c7d2713d404c
