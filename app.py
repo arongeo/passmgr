@@ -26,7 +26,7 @@ def login():
                 del password
         else:
             # Is it the second time in the infinite loop
-            isIt2nd = False;
+            isIt2nd = False
             while True:
                 os.system("clear")
                 # Print Lock Icon
