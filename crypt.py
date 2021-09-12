@@ -1,6 +1,6 @@
 from cryptography.fernet import Fernet
 import hashlib
-from Crypto.Cipher import AES
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 import string
 import random
 import os
@@ -57,41 +57,58 @@ def getKey(password):
         iv_file.write(iv)
 
     iv_file.close()
-    aes_object = AES.new(password_aes_key, AES.MODE_CBC, iv)
+    cipher = Cipher(algorithms.AES(password_aes_key.encode('UTF-8')), modes.CBC(iv.encode('UTF-8')))
 
     del sha512
     del password_aes_key
 
     if do_aes_files_exist() == True:
+        decryptor = cipher.decryptor()
         encrypted_aes_key_file = open(f"{os.getenv('HOME')}/passmgr/aes_key", "rb")
         encrypted_aes_key = encrypted_aes_key_file.read()
-        aes_key = aes_object.decrypt(encrypted_aes_key)
+        aes_key = decryptor.update(encrypted_aes_key) + decryptor.finalze()
         encrypted_aes_key_file.close()
 
+        del decryptor
+
+        decryptor = cipher.decryptor()
+        
         encrypted_db_key_file = open(f"{os.getenv('HOME')}/passmgr/db_key", "rb")
         encrypted_db_key = encrypted_db_key_file.read()
-        db_key = aes_object.decrypt(encrypted_db_key).decode('UTF-8')
+        db_key = decryptor.update(encrypted_db_key) + decryptor.finalize()
+        db_key.decode('UTF-8')
         encrypted_db_key_file.close()
         db_key = db_key.replace(' ', '')
+
+        del decryptor
+        del cipher
 
         aes = aes_key
 
         return aes, db_key
     else:
+        encryptor = cipher.encryptor()
         aes_key = os.urandom(32)
-        encrypted_aes_key = aes_object.encrypt(aes_key)
+        encrypted_aes_key = encryptor.update(aes_key) + encryptor.finalize()
         encrypted_aes_key_file = open(f"{os.getenv('HOME')}/passmgr/aes_key", "wb")
         encrypted_aes_key_file.write(encrypted_aes_key)
         encrypted_aes_key_file.close()
+
+        del encryptor
+
+        encryptor = cipher.encryptor()
 
         db_key = Fernet.generate_key()
         db_key = db_key.decode('UTF-8')
         while len(db_key) % 16 != 0:
             db_key += " "
-        encrypted_db_key = aes_object.encrypt(db_key)
+        encrypted_db_key = encryptor.update(db_key.encode('UTF-8')) + encryptor.finalize()
         encrypted_db_key_file = open(f"{os.getenv('HOME')}/passmgr/db_key", "wb")
         encrypted_db_key_file.write(encrypted_db_key)
         encrypted_db_key_file.close()
+
+        del encryptor
+        del cipher
 
         aes = aes_key
 
@@ -131,16 +148,22 @@ def encrypt_username_and_password(aes, username, password):
         password += " "
 
     username_iv = generateString(16)
-    aes_object = AES.new(aes, AES.MODE_CBC, username_iv)
-    encrypted_username = aes_object.encrypt(username)
+    cipher = Cipher(algorithms.AES(aes), modes.CBC(username_iv.encode('UTF-8')))
+    encryptor = cipher.encryptor()
+    encrypted_username = encryptor.update(username.encode('UTF-8')) + encryptor.finalize()
+
+    del encryptor
+    del cipher
 
     password_iv = generateString(16)
-    aes_object = AES.new(aes, AES.MODE_CBC, password_iv)
-    encrypted_password = aes_object.encrypt(password)
-
+    cipher = Cipher(algorithms.AES(aes), modes.CBC(password_iv.encode('UTF-8')))
+    encryptor = cipher.encryptor()
+    encrypted_password = encryptor.update(password.encode('UTF-8')) + encryptor.finalize()
+    
+    del encryptor
     del password
     del username
-    del aes_object
+    del cipher
     password = [encrypted_password, password_iv]
     username = [encrypted_username, username_iv]
     return username, password

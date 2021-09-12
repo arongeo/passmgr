@@ -1,13 +1,14 @@
-import crypt
 import os
+import crypt
 import database
 import menu
+import app
 
 def register(password):
     if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") == True:
         os.system("clear")
         print("[ERROR] Password file already exists, quitting!")
-        quit()
+        app.quit_app()
     else:
         os.makedirs(f"{os.getenv('HOME')}/passmgr")
         password_hash = crypt.sha256_hash(password)
@@ -21,7 +22,7 @@ def login(password):
     if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") == False:
         os.system("clear")
         print("[ERROR] Password file doesn't exist, quitting!")
-        quit()
+        app.quit_app()
     else:
         password_hash = crypt.sha256_hash(password)
         file = open(f"{os.getenv('HOME')}/passmgr/password", "r")

@@ -1,6 +1,7 @@
 import auth
 import os
 import getpass
+import sys
 
 global_aes = []
 global_db_key = ""
@@ -59,5 +60,5 @@ def login():
 
 def quit_app():
     os.system("clear")
-    quit()
+    sys.exit()
 
