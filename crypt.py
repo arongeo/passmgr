@@ -34,8 +34,8 @@ def advanced_password_hash(password):
     return sha256_hash
 
 def do_aes_files_exist():
-    if os.path.isfile(f"{os.getenv('HOME')}/passmgr/aes_key") == True:
-        if os.path.isfile(f"{os.getenv('HOME')}/passmgr/db_key") == True:
+    if os.path.isfile(f"{os.getenv('HOME')}/passmgr/aes_key") is True:
+        if os.path.isfile(f"{os.getenv('HOME')}/passmgr/db_key") is True:
             return True
         else:
             return False
@@ -62,11 +62,11 @@ def getKey(password):
     del sha512
     del password_aes_key
 
-    if do_aes_files_exist() == True:
+    if do_aes_files_exist() is True:
         decryptor = cipher.decryptor()
         encrypted_aes_key_file = open(f"{os.getenv('HOME')}/passmgr/aes_key", "rb")
         encrypted_aes_key = encrypted_aes_key_file.read()
-        aes_key = decryptor.update(encrypted_aes_key) + decryptor.finalze()
+        aes_key = decryptor.update(encrypted_aes_key) + decryptor.finalize()
         encrypted_aes_key_file.close()
 
         del decryptor
@@ -76,7 +76,7 @@ def getKey(password):
         encrypted_db_key_file = open(f"{os.getenv('HOME')}/passmgr/db_key", "rb")
         encrypted_db_key = encrypted_db_key_file.read()
         db_key = decryptor.update(encrypted_db_key) + decryptor.finalize()
-        db_key.decode('UTF-8')
+        db_key = db_key.decode('UTF-8')
         encrypted_db_key_file.close()
         db_key = db_key.replace(' ', '')
 

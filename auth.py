@@ -5,7 +5,7 @@ import menu
 import app
 
 def register(password):
-    if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") == True:
+    if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") is True:
         os.system("clear")
         print("[ERROR] Password file already exists, quitting!")
         app.quit_app()
@@ -19,7 +19,7 @@ def register(password):
         return
 
 def login(password):
-    if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") == False:
+    if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") is False:
         os.system("clear")
         print("[ERROR] Password file doesn't exist, quitting!")
         app.quit_app()
@@ -35,7 +35,7 @@ def login(password):
             # -PASSWORD--AESKEY--ENCRYPTED_PASSWORDS
             #
             aes, db_key = crypt.getKey(password)
-            if os.path.isfile(f"{os.getenv('HOME')}/passmgr/passwords.db") == False:
+            if os.path.isfile(f"{os.getenv('HOME')}/passmgr/passwords.db") is False:
                 database.create_db()
                 crypt.encrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
             menu.menu(aes, db_key)

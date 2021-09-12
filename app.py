@@ -2,23 +2,21 @@ import auth
 import os
 import getpass
 import sys
-
-global_aes = []
-global_db_key = ""
+import time
 
 def login():
     lock = ["", " @@@@@@@ ", " @@     @@ ", " @       @ "," @       @ ","@@@@@@@@@@@","@@@@@@@@@@@","@@@@@ @@@@@","@@@@@ @@@@@","@@@@@@@@@@@","@@@@@@@@@@@", "", "passmgr", "", ""]
     os.system("clear")
-    height, width = os.popen("stty size", 'r').read().split()
+    width = os.popen("stty size", 'r').read().split()[1]
     while True:
-        if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") == True:
+        if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") is True:
             login_status = True
             while True:
                 os.system("clear")
                 # Print Lock Icon
                 for i in range(len(lock)):
                     print(lock[i].center(int(width)))
-                if login_status == False:
+                if login_status is False:
                     print("Master Password is incorrect, please try again!")
                     print("")
                 print("Enter Master Password:")
@@ -34,7 +32,7 @@ def login():
                 for i in range(len(lock)):
                     print(lock[i].center(int(width)))
                 # If it is the second time in the loop print these
-                if isIt2nd == True:
+                if isIt2nd is True:
                     print("Registration failed! Please Try Again!")
                     print(" ")
                 print("Set Master Password:")

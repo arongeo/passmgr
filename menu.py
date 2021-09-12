@@ -7,7 +7,7 @@ import database
 
 def add_password(aes, db_key):
     password_verified = False
-    while password_verified == False:
+    while password_verified is False:
         os.system("clear")
         height, width = os.popen("stty size", 'r').read().split()
         height = int(height)
