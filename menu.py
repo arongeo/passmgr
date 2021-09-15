@@ -4,6 +4,7 @@ import os
 import math
 import crypt
 import database
+import time
 
 def add_password(aes, db_key):
     password_verified = False
@@ -34,6 +35,31 @@ def add_password(aes, db_key):
     username, password = crypt.encrypt_username_and_password(aes, username, password)
     database.insert_into_db(db_key, website, username[0], password[0], username[1], password[1])
 
+def get_passwords(aes, db_key):
+    credentials = database.read_from_db(db_key)
+    credentials_length = len(credentials)
+    hadError = False
+    while True:
+        os.system("clear")
+        print("Type the ID of the credentials or B to get back to the menu")
+        print("")
+        height, width = os.popen("stty size", 'r').read().split()
+        if (int(height)-5)>credentials_length:
+            for i in range(credentials_length):
+                print(str(i+1) + " " + credentials[i][1])
+        print("")
+        if hadError is True:
+            print("Invalid Choice. (There is no password with ID " + str(c) + ")")
+        c = input("> ")
+        if isinstance(c, str):
+            hadError = False
+            if c in ("b", "B", "back", "Back", "BACK"):
+                break
+        c = int(c)
+        if c in range(1, credentials_length):
+            break
+        else:
+            hadError = True       
 
 def menu(aes, db_key):
     while True:
@@ -50,7 +76,7 @@ def menu(aes, db_key):
         if c == "A" or c == "a":
             add_password(aes, db_key)
         if c == "G" or c == "g":
-            database.read_from_db(db_key)
+            get_passwords(aes, db_key)
         if c == "H" or c == "h":
             pass
         if c == "Q" or c == "q":
