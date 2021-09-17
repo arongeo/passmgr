@@ -35,10 +35,7 @@ def advanced_password_hash(password):
 
 def do_aes_files_exist():
     if os.path.isfile(f"{os.getenv('HOME')}/passmgr/aes_key") is True:
-        if os.path.isfile(f"{os.getenv('HOME')}/passmgr/db_key") is True:
-            return True
-        else:
-            return False
+        return os.path.isfile(f"{os.getenv('HOME')}/passmgr/db_key") is True
     else:
         return False
 
