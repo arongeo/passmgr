@@ -36,9 +36,10 @@ def add_password(aes, db_key):
     database.insert_into_db(db_key, website, username[0], password[0], username[1], password[1])
 
 def get_passwords(aes, db_key):
+    c = None
+    hadError = False
     credentials = database.read_from_db(db_key)
     credentials_length = len(credentials)
-    hadError = False
     while True:
         os.system("clear")
         print("Type the ID of the credentials or B to get back to the menu")
@@ -50,16 +51,19 @@ def get_passwords(aes, db_key):
         print("")
         if hadError is True:
             print("Invalid Choice. (There is no password with ID " + str(c) + ")")
-        c = input("> ")
-        if isinstance(c, str):
             hadError = False
-            if c in ("b", "B", "back", "Back", "BACK"):
-                break
-        c = int(c)
+        c = input("> ")
+        if c in ("b", "B", "back", "Back", "BACK"):
+            break
+        try:
+            c = int(c)
+        except ValueError:
+            hadError = True
+            continue
         if c in range(1, credentials_length):
             break
         else:
-            hadError = True       
+            hadError = True
 
 def menu(aes, db_key):
     while True:
