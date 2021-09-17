@@ -4,7 +4,6 @@ import os
 import math
 import crypt
 import database
-import time
 
 def add_password_menu(aes, db_key):
     password_verified = False
@@ -43,7 +42,7 @@ def show_password(passid, credentials, aes):
     username_iv = credentials[4]
     password_iv = credentials[5]
 
-    username, password = crypt.decrypt_username_and_password(aes, encrypted_username, encrypted_password, 
+    username, password = crypt.decrypt_username_and_password(aes, encrypted_username, encrypted_password,
                                         username_iv, password_iv)
 
     height, width = os.popen("stty size", 'r').read().split()
@@ -55,8 +54,8 @@ def show_password(passid, credentials, aes):
 
         for _ in range(math.floor((height-5)/2)):
             print("")
-        
-        username_text = "Username: " + username 
+
+        username_text = "Username: " + username
         print(username_text.center(width))
         password_text = "Password: " + ("*"*len(password))
         print(password_text.center(width))
@@ -118,7 +117,7 @@ def get_password_menu(aes, db_key):
         os.system("clear")
         print("Type the ID of the credentials or B to get back to the menu")
         print("")
-        height, width = os.popen("stty size", 'r').read().split()
+        height = os.popen("stty size", 'r').read().split()[0]
         if (int(height)-5)>credentials_length:
             for i in range(credentials_length):
                 print(str(i+1) + " " + credentials[i][1])
