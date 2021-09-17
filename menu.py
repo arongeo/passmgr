@@ -64,7 +64,7 @@ def show_password(passid, credentials, aes):
 
         for _ in range(math.floor((height-5)/2)):
             print("")
-        
+
         c = getch.getch()
 
         if c in ("b", "B"):
@@ -78,7 +78,7 @@ def show_password(passid, credentials, aes):
                 for _ in range(math.floor((height-5)/2)):
                     print("")
                 
-                username_text = "Username: " + username 
+                username_text = "Username: " + username
                 print(username_text.center(width))
                 password_text = "Password: " + password
                 print(password_text.center(width))
