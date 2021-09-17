@@ -165,4 +165,23 @@ def encrypt_username_and_password(aes, username, password):
     username = [encrypted_username, username_iv]
     return username, password
 
+def decrypt_username_and_password(aes, encrypted_username, encrypted_password, username_iv, password_iv):
+    cipher = Cipher(algorithms.AES(aes), modes.CBC(username_iv.encode('UTF-8')))
+    decryptor = cipher.decryptor()
+    username = decryptor.update(encrypted_username) + decryptor.finalize()
+    username = username.decode('UTF-8')
+    username = username.replace(' ', '')
 
+    del decryptor
+    del cipher
+
+    cipher = Cipher(algorithms.AES(aes), modes.CBC(password_iv.encode('UTF-8')))
+    decryptor = cipher.decryptor()
+    password = decryptor.update(encrypted_password) + decryptor.finalize()
+    password = password.decode('UTF-8')
+    password = password.replace(' ', '')
+    
+    del decryptor
+    del cipher
+
+    return username, password

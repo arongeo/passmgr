@@ -6,7 +6,7 @@ import crypt
 import database
 import time
 
-def add_password(aes, db_key):
+def add_password_menu(aes, db_key):
     password_verified = False
     while password_verified is False:
         os.system("clear")
@@ -35,10 +35,84 @@ def add_password(aes, db_key):
     username, password = crypt.encrypt_username_and_password(aes, username, password)
     database.insert_into_db(db_key, website, username[0], password[0], username[1], password[1])
 
-def get_passwords(aes, db_key):
+def show_password(passid, credentials, aes):
+    passid = passid - 1
+    credentials = credentials[passid]
+    encrypted_username = credentials[2]
+    encrypted_password = credentials[3]
+    username_iv = credentials[4]
+    password_iv = credentials[5]
+
+    username, password = crypt.decrypt_username_and_password(aes, encrypted_username, encrypted_password, 
+                                        username_iv, password_iv)
+
+    height, width = os.popen("stty size", 'r').read().split()
+    height = int(height)
+    width = int(width)
+    passwordScreen = True
+    while passwordScreen is True:
+        os.system("clear")
+
+        for _ in range(math.floor((height-5)/2)):
+            print("")
+        
+        username_text = "Username: " + username 
+        print(username_text.center(width))
+        password_text = "Password: " + ("*"*len(password))
+        print(password_text.center(width))
+        print("")
+        print("(B)ack, (Q)uit, or (R)eveal".center(width))
+
+        for _ in range(math.floor((height-5)/2)):
+            print("")
+        
+        c = getch.getch()
+
+        if c in ("b", "B"):
+            passwordScreen = False
+        if c in ("q", "Q"):
+            app.quit_app()
+        if c in ("r", "R"):
+            while True:
+                os.system("clear")
+
+                for _ in range(math.floor((height-5)/2)):
+                    print("")
+                
+                username_text = "Username: " + username 
+                print(username_text.center(width))
+                password_text = "Password: " + password
+                print(password_text.center(width))
+                print("")
+                print("(B)ack or (Q)uit".center(width))
+
+                for _ in range(math.floor((height-5)/2)):
+                    print("")
+
+                c2 = getch.getch()
+
+                if c2 in ("b", "B"):
+                    passwordScreen = False
+                    break
+                if c2 in ("q", "Q"):
+                    app.quit_app()
+    
+    del passid
+    del credentials
+    del encrypted_username
+    del encrypted_password
+    del username_iv
+    del password_iv
+    del username
+    del password
+    del username_text
+    del password_text
+
+def get_password_menu(aes, db_key):
     c = None
     hadError = False
     credentials = database.read_from_db(db_key)
+    del db_key
     credentials_length = len(credentials)
     while True:
         os.system("clear")
@@ -60,10 +134,12 @@ def get_passwords(aes, db_key):
         except ValueError:
             hadError = True
             continue
-        if c in range(1, credentials_length):
-            break
+        if c in range(1, credentials_length+1):
+            show_password(c, credentials, aes)
         else:
             hadError = True
+    del credentials
+    del credentials_length
 
 def menu(aes, db_key):
     while True:
@@ -78,9 +154,9 @@ def menu(aes, db_key):
             print("")
         c = getch.getch()
         if c == "A" or c == "a":
-            add_password(aes, db_key)
+            add_password_menu(aes, db_key)
         if c == "G" or c == "g":
-            get_passwords(aes, db_key)
+            get_password_menu(aes, db_key)
         if c == "H" or c == "h":
             pass
         if c == "Q" or c == "q":

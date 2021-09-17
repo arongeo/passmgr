@@ -35,13 +35,13 @@ def insert_into_db(db_key, websitename, username, password, username_iv, passwor
 
     sql_id_file = open(f"{os.getenv('HOME')}/passmgr/sql_id", "w")
     sql_id_file.write(str(sql_id))
-    sql_id_file.close()       
+    sql_id_file.close()
 
 def reset_id():
     sql_id = 1
     sql_id_file = open(f"{os.getenv('HOME')}/passmgr/sql_id", "w")
     sql_id_file.write(str(sql_id))
-    sql_id_file.close()       
+    sql_id_file.close()
     
 def read_from_db(db_key):
     crypt.decrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
@@ -54,7 +54,7 @@ def read_from_db(db_key):
         credentials.append(row)
 
     crypt.encrypt_database(f"{os.getenv('HOME')}/passmgr/passwords.db", db_key)
-    
+
     return credentials
 
 def delete_from_db(db_key, sql_id):
