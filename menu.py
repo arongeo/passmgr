@@ -176,7 +176,7 @@ def remove_password_menu(db_key):
                 print("Press Any key, to return to the Main Menu.".center(int(width)))
                 for _ in range(math.floor(int(height)/2)-1):
                     print("")
-                confirmation = getch.getch()
+                getch.getch()
                 break
             else:
                 continue
@@ -215,7 +215,7 @@ def menu(aes, db_key):
             print("Press any key to return to the Main Menu.".center(int(width)))
             for _ in range(math.floor(int(height)/2)-1):
                 print("")
-            confirmation = getch.getch()
+            getch.getch()
         if c in ("q", "Q"):
             app.quit_app()
 
