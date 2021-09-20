@@ -190,7 +190,7 @@ def menu(aes, db_key):
     while True:
         os.system("clear")
         height, width = os.popen("stty size", 'r').read().split()
-        menu_options = "(A)dd Credentials, (G)et Credentials, (R)emove Credentials, (H)elp or (Q)uit"
+        menu_options = "(A)dd Credentials, (G)et Credentials, (R)emove Credentials or (Q)uit"
         height_until_middle = math.floor(int(height)/2)
         for _ in range(height_until_middle):
             print("")
@@ -204,8 +204,18 @@ def menu(aes, db_key):
             get_password_menu(aes, db_key)
         if c in ("r", "R"):
             remove_password_menu(db_key)
-        if c in ("h", "H"):
-            pass
+        if c in ("c", "C"):
+            os.system("clear")
+            for _ in range(math.floor(int(height)/2)-5):
+                print("")
+            print("You discovered an Easter Egg!".center(int(width)))
+            print("This program was created by arongeo.".center(int(width)))
+            print("https://arongeo.com/".center(int(width)))
+            print("")
+            print("Press any key to return to the Main Menu.".center(int(width)))
+            for _ in range(math.floor(int(height)/2)-1):
+                print("")
+            confirmation = getch.getch()
         if c in ("q", "Q"):
             app.quit_app()
 
