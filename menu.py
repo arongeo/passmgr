@@ -4,6 +4,7 @@ import os
 import math
 import crypt
 import database
+import auth
 
 def add_password_menu(aes, db_key):
     password_verified = False
@@ -140,11 +141,56 @@ def get_password_menu(aes, db_key):
     del credentials
     del credentials_length
 
+def remove_password_menu(db_key):
+    c = None
+    hadError = False
+    credentials = database.read_from_db(db_key)
+    credentials_length = len(credentials)
+    while True:
+        os.system("clear")
+        print("Type the ID of the credentials or B to get back to the menu")
+        print("")
+        height, width = os.popen("stty size", 'r').read().split()
+        if (int(height)-5)>credentials_length:
+            for i in range(credentials_length):
+                print(str(i+1) + " " + credentials[i][1])
+        print("")
+        if hadError is True:
+            print("Invalid Choice. (There is no password with ID " + str(c) + ")")
+            hadError = False
+        c = input("> ")
+        if c in ("b", "B", "back", "Back", "BACK"):
+            break
+        try:
+            c = int(c)
+        except ValueError:
+            hadError = True
+            continue
+        if c in range(1, credentials_length+1):
+            if auth.verified() is True:
+                database.delete_from_db(db_key, credentials[c-1][0])
+                os.system("clear")
+                for _ in range(math.floor(int(height)/2)-2):
+                    print("")
+                print(("Deleted password with ID " + str(c) + ".").center(int(width)))
+                print("Press Any key, to return to the Main Menu.".center(int(width)))
+                for _ in range(math.floor(int(height)/2)-1):
+                    print("")
+                confirmation = getch.getch()
+                break
+            else:
+                continue
+        else:
+            hadError = True
+    del db_key
+    del credentials
+    del credentials_length
+
 def menu(aes, db_key):
     while True:
         os.system("clear")
         height, width = os.popen("stty size", 'r').read().split()
-        menu_options = "(A)dd Password, (G)et Password, (H)elp or (Q)uit"
+        menu_options = "(A)dd Credentials, (G)et Credentials, (R)emove Credentials, (H)elp or (Q)uit"
         height_until_middle = math.floor(int(height)/2)
         for _ in range(height_until_middle):
             print("")
@@ -152,12 +198,14 @@ def menu(aes, db_key):
         for _ in range((int(height)-height_until_middle-1)):
             print("")
         c = getch.getch()
-        if c == "A" or c == "a":
+        if c in ("a", "A"):
             add_password_menu(aes, db_key)
-        if c == "G" or c == "g":
+        if c in ("g", "G"):
             get_password_menu(aes, db_key)
-        if c == "H" or c == "h":
+        if c in ("r", "R"):
+            remove_password_menu(db_key)
+        if c in ("h", "H"):
             pass
-        if c == "Q" or c == "q":
+        if c in ("q", "Q"):
             app.quit_app()
 

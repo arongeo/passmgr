@@ -18,8 +18,8 @@ def login():
                 if login_status is False:
                     print("Master Password is incorrect, please try again!")
                     print("")
-                print("Enter Master Password:")
-                password = getpass.getpass("")
+                print("Enter Master Password:".center(int(width)))
+                password = getpass.getpass("".center(round(int(width)/2)-1))
                 login_status = auth.login(password)
                 del password
         else:
@@ -32,10 +32,19 @@ def login():
                     print(lock[i].center(int(width)))
                 # If it is the second time in the loop print these
                 if isIt2nd is True:
-                    print("Registration failed! Please Try Again!")
-                    print(" ")
+                    if len(password1) < 8:
+                        print("Registration failed! The password must be")
+                        print("at least 8 characters long. Please Try Again!")
+                        print("")
+                    else:
+                        print("Registration failed! The two passwords")
+                        print("don't match. Please Try Again!")
+                        print("")
                 print("Set Master Password:")
                 password1 = getpass.getpass("")
+                if len(password1) < 8:
+                    isIt2nd = True
+                    continue
                 os.system("clear")
                 # Print Lock Icon
                 for i in range(len(lock)):

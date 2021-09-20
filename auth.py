@@ -3,6 +3,7 @@ import crypt
 import database
 import menu
 import app
+import getpass
 
 def register(password):
     if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") is True:
@@ -42,3 +43,30 @@ def login(password):
         else:
             return False
 
+def verified():
+    lock = ["", " @@@@@@@ ", " @@     @@ ", " @       @ "," @       @ ","@@@@@@@@@@@","@@@@@@@@@@@","@@@@@ @@@@@","@@@@@ @@@@@","@@@@@@@@@@@","@@@@@@@@@@@", "", "passmgr", "", ""]
+    width = os.popen("stty size", 'r').read().split()[1]
+    login_status = True
+    with open(f"{os.getenv('HOME')}/passmgr/password", 'r') as file:
+        hashed_password = file.read()
+        file.close()
+    while True:
+        os.system("clear")
+        # Print Lock Icon
+        for i in range(len(lock)):
+            print(lock[i].center(int(width)))
+        print("")
+        print("Press B and ENTER to go back.".center(int(width)))
+        print("")
+        if login_status is False:
+            print("Master Password is incorrect, please try again!")
+            print("")
+        print("Enter Master Password to verify:".center(int(width)))
+        password = getpass.getpass("".center(round(int(width)/2)-1))
+        if password in ("b", "B"):
+            break
+        elif crypt.sha256_hash(password) == hashed_password:
+            del password
+            del hashed_password
+            return True
+    return False
