@@ -26,9 +26,9 @@ def add_password_menu(aes, db_key):
         for _ in range(height_3-1):
             print("")
         c = getch.getch()
-        if c == "E" or c == "e":
+        if c in ("e", "E"):
             continue
-        if c == "B" or c == "b":
+        if c in ("b", "B"):
             return
         else:
             password_verified = True
