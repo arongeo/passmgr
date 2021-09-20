@@ -24,6 +24,8 @@ def login():
                 del password
         else:
             # Is it the second time in the infinite loop
+            password1 = None
+            password2 = None
             isIt2nd = False
             while True:
                 os.system("clear")
