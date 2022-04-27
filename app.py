@@ -8,7 +8,7 @@ def login():
     os.system("clear")
     width = os.popen("stty size", 'r').read().split()[1]
     while True:
-        if os.path.isfile(f"{os.getenv('HOME')}/passmgr/password") is True:
+        if os.path.isfile(f"{os.getenv('HOME')}/passmgr_data/password") is True:
             login_status = True
             while True:
                 os.system("clear")
